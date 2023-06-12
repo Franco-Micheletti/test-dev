@@ -1,7 +1,8 @@
 """
 Contains a function tthat updates the features of a vehicle.
 """
-from ..models import VehicleFeature, FeatureDescription
+from ..models import VehicleFeature
+from ..functions.create_vehicle_features import create_vehicle_features
 
 
 def update_vehicle_features(feature_list: list, vehicle):
@@ -22,20 +23,15 @@ def update_vehicle_features(feature_list: list, vehicle):
     ]
 
     """
+    vehicle_features = VehicleFeature.objects.filter(vehicle=vehicle)
+
+    if len(vehicle_features) > 0:
+        for feature in vehicle_features:
+            feature.delete()
 
     if feature_list is not None:
         if isinstance(feature_list, list) is True:
-            for feature_couple in feature_list:
-                feature_name_to_update = feature_couple[0]
-                new_description = feature_couple[1]
+            status = create_vehicle_features(
+                features=feature_list, vehicle=vehicle)
 
-                vehicle_feature = VehicleFeature.objects.get(
-                    vehicle=vehicle, feature__feature_name__name=feature_name_to_update)
-
-                if vehicle_feature:
-                    description_object = FeatureDescription.objects.get(
-                        description=vehicle_feature.feature.feature_description.description)
-
-                    if description_object:
-                        description_object.description = new_description
-                        description_object.save()
+            return status

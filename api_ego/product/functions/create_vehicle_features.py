@@ -50,6 +50,6 @@ def create_vehicle_features(features, vehicle):
             VehicleFeature.objects.create(
                 vehicle=vehicle, feature=feature_couple[0])
 
-            return 1
+        return 1
     except Exception as error:
         return error

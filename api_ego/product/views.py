@@ -12,9 +12,15 @@ from .models import Vehicle
 from .serializers import VehicleSerializer
 
 # Functions
-from .functions.update_vehicle_features import update_vehicle_features
+
 from .functions.get_features_of_vehicle import get_features_of_vehicle
+from .functions.get_vehicle_images import get_vehicle_images
+
 from .functions.create_vehicle_features import create_vehicle_features
+from .functions.create_vehicle_images import create_vehicle_images
+
+from .functions.update_vehicle_features import update_vehicle_features
+from .functions.update_vehicle_images import update_vehicle_images
 
 
 class SpecificVehicle(APIView):
@@ -34,11 +40,9 @@ class SpecificVehicle(APIView):
 
         vehicle_basic_data = VehicleSerializer(vehicle).data
 
-        # Get features of the vehicle
-        vehicle_features_data = get_features_of_vehicle(vehicle=vehicle)
-
         response_data = {"basic": vehicle_basic_data,
-                         "features": vehicle_features_data}
+                         "features": get_features_of_vehicle(vehicle=vehicle),
+                         "images": get_vehicle_images(vehicle=vehicle)}
 
         return Response(response_data, status=HTTP_200_OK)
 
@@ -81,10 +85,24 @@ class SpecificVehicle(APIView):
         vehicle.save()
         # Update vehicle features if any
         features = request.data.get('features', None)
-        update_vehicle_features(feature_list=features, vehicle=vehicle)
+        if features:
+            status = update_vehicle_features(
+                feature_list=features, vehicle=vehicle)
+            if status != 1:
+                return Response(status, HTTP_500_INTERNAL_SERVER_ERROR)
+        # Update vehicle images if any
+        images = request.data.get('images', None)
+        if images:
+            status = update_vehicle_images(image_list=images, vehicle=vehicle)
+            if status != 1:
+                if status == "missing url":
+                    return Response("Image URL is required", status=HTTP_400_BAD_REQUEST)
+                return Response(status, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
         response_data = {"message": "Vehicle updated successfully",
-                         "vehicle_data": VehicleSerializer(vehicle).data}
+                         "basic": VehicleSerializer(vehicle).data,
+                         "features": get_features_of_vehicle(vehicle=vehicle),
+                         "images": get_vehicle_images(vehicle=vehicle)}
 
         return Response(response_data, status=HTTP_200_OK)
 
@@ -120,6 +138,17 @@ class CreateVehicle(APIView):
                     return Response(status, HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 return Response("Vehicle features must be a list", status=HTTP_400_BAD_REQUEST)
+
+        # Create vehicle images if any
+
+        images = request.data.get('images', None)
+        if images is not None:
+            status = create_vehicle_images(
+                image_list=images, vehicle=new_vehicle)
+            if status != 1:
+                if status == "missing url":
+                    return Response("Image URL is required", status=HTTP_400_BAD_REQUEST)
+                return Response(status, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"message": "Vehicle Created successfully",
                          "vehicle_basic": new_vehicle_data}, status=HTTP_201_CREATED)

@@ -2,7 +2,7 @@
 Product serializers
 """
 from rest_framework.serializers import ModelSerializer
-from .models import Vehicle
+from .models import Vehicle, VehicleImage
 
 
 class VehicleSerializer(ModelSerializer):
@@ -17,5 +17,16 @@ class VehicleSerializer(ModelSerializer):
                   'model',
                   'brand',
                   'price',
-                  'date',
+                  'date'
                   )
+
+
+class VehicleImageSerializer(ModelSerializer):
+    """
+    Vehicle image serializer
+    """
+    class Meta:
+        model = VehicleImage
+        fields = ('url',
+                  'title',
+                  'detail')

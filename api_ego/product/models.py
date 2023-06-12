@@ -60,11 +60,11 @@ class VehicleFeature(models.Model):
     feature = models.ForeignKey(to=FeatureCouple, on_delete=models.CASCADE)
 
 
-# class VehicleImage(models.Model):
-#     """
-#     Vehicle Images
-#     """
-#     vehicle = models.ForeignKey(to=Vehicle, on_delete=models.CASCADE)
-#     image = models.ImageField(upload_to='images')
-#     title = models.CharField(max_length=300)
-#     detail = models.CharField(max_length=2000)
+class VehicleImage(models.Model):
+    """
+    Vehicle Images
+    """
+    vehicle = models.ForeignKey(to=Vehicle, on_delete=models.CASCADE)
+    image = models.URLField(max_length=300, null=True, blank=True)
+    title = models.CharField(max_length=300, null=True, blank=True)
+    detail = models.CharField(max_length=2000, null=True, blank=True)

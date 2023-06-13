@@ -53,22 +53,57 @@ class SpecificVehicle(APIView):
         try:
             vehicle = Vehicle.objects.get(id=vehicle_id)
         except Vehicle.DoesNotExist:
-            return Response("Vehicle does not exist", status=HTTP_404_NOT_FOUND)
+            message = "Vehicle does not exist"
+            return Response(message, status=HTTP_404_NOT_FOUND)
 
         try:
             if vehicle:
                 vehicle_deleted = vehicle.delete()
                 if vehicle_deleted[0] > 0:
-                    return Response("Vehicle deleted successfully")
-                return Response("Error while deleting the resource")
+                    message = "Vehicle deleted successfully"
+                else:
+                    message = "Error while deleting the resource"
+                    return Response(message, status=HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as error:
             message = "Can't delete resource\n" + "ERROR: " + error
             return Response(message, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(message, status=HTTP_200_OK)
 
     def put(self, request, vehicle_id):
         """
         Updates data of the vehicle with the data provided , 
         if a field is missing in the request body, the current data of the vehicle will be used
+
+        **SAMPLE REQUEST BODY**
+        ```
+        {
+            "name": "Hilux Conquest",
+            "type": "Pickups",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 19300000,
+            "features":[
+                            ["seguridad","7 airbags: frontales (conductor y acompañante), de rodilla (conductor), laterales (x2) y de cortina (x2)"],
+                            ["confort","Audio con pantalla táctil de 8“ y Control de velocidad crucero"],
+                            ["exterior","Faros delanteros halógenos con regulación en altura y Sistema 'Follow me home'"],
+                            ["transmision","Manual de 6 velocidades. Traccion 4x2"]
+                        ],
+            "images": [
+                {
+                    "url": "https://test/images/fake/1.png",
+                    "title": "image title 1 updated",
+                    "detail": "image detail 1 updated"
+                },
+                {
+                    "url": "https://test/images/fake/2.png",
+                    "title": "image title 2 updated",
+                    "detail": "image detail 2 updated"
+                }
+            ]
+        }
+        ```
         """
         try:
             vehicle = Vehicle.objects.get(id=vehicle_id)
@@ -115,6 +150,36 @@ class CreateVehicle(APIView):
     def post(self, request):
         """
         Post method for creating a vehicle
+
+        **SAMPLE REQUEST BODY**
+        ```
+        {
+            "name": "Hilux Conquest",
+            "type": "Pickups",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 19300000,
+            "features":[
+                            ["seguridad","7 airbags: frontales (conductor y acompañante), de rodilla (conductor), laterales (x2) y de cortina (x2)"],
+                            ["confort","Audio con pantalla táctil de 8“ y Control de velocidad crucero"],
+                            ["exterior","Faros delanteros halógenos con regulación en altura y Sistema 'Follow me home'"],
+                            ["transmision","Manual de 6 velocidades. Traccion 4x2"]
+                        ],
+            "images": [
+                {
+                    "url": "https://test/images/fake/1.png",
+                    "title": "image title 1 updated",
+                    "detail": "image detail 1 updated"
+                },
+                {
+                    "url": "https://test/images/fake/2.png",
+                    "title": "image title 2 updated",
+                    "detail": "image detail 2 updated"
+                }
+            ]
+        }
+        ```
         """
         # Create vehicle basic info
         new_vehicle = Vehicle.objects.create(

@@ -28,6 +28,10 @@ python manage.py runserver
 
 ### AND THAT'S IT ! NOW YOU ARE READY TO TEST THE API WITH THE ENDPOINTS AVAILABLE
 
+# SWAGGER UI
+
+- /docs/
+
 # ENDPOINTS
 
 - /vehicle/create - [POST]

@@ -193,7 +193,7 @@ class CreateVehicle(APIView):
         if new_vehicle:
             new_vehicle_data = VehicleSerializer(new_vehicle).data
 
-        # Create vehicle features
+        # Create vehicle features if any
         feature_list = request.data.get('features', None)
         if feature_list is not None:
             if isinstance(feature_list, list) is True:
@@ -205,7 +205,6 @@ class CreateVehicle(APIView):
                 return Response("Vehicle features must be a list", status=HTTP_400_BAD_REQUEST)
 
         # Create vehicle images if any
-
         images = request.data.get('images', None)
         if images is not None:
             status = create_vehicle_images(

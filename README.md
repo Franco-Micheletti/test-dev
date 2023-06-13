@@ -34,5 +34,19 @@ python manage.py runserver
 
 # ENDPOINTS
 
+## Product
 - /vehicle/create - [POST]
 - /specific_vehicle/id=<vehicle_id> - [GET] [PUT] [DELETE]
+## Search
+- /search/type=<vehicle_type>&order_by=<order_by> - [GET]
+- /search/type=<vehicle_type> - [GET]
+
+# TESTING
+
+In order to ensure that the API is working as expected i have created a series of tests for each endpoint that can be run before working with the API or touching any part of the code.
+
+Open an integrated terminal on the api_ego folder that contains the manage.py file and execute the following command:
+```
+python manage.py test
+```
+Result should be OK if all the test were successful.

@@ -1,7 +1,3 @@
-path('search/type=<vehicle_type>&order_by=<order_by>',
-         views.SearchWithOrderBy.as_view()),
-    path('search/type=<vehicle_type>', views.SearchWithOutOrderBy.as_view())
-
 # SEARCH API
 
 Returns data in JSON format with x amount of elements.

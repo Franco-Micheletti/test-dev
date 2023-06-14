@@ -36,7 +36,7 @@ class SpecificVehicle(APIView):
         try:
             vehicle = Vehicle.objects.get(id=vehicle_id)
         except Vehicle.DoesNotExist:
-            return Response("Vehicle does not exist")
+            return Response("Vehicle does not exist", status=HTTP_404_NOT_FOUND)
 
         vehicle_basic_data = VehicleSerializer(vehicle).data
 
@@ -108,7 +108,7 @@ class SpecificVehicle(APIView):
         try:
             vehicle = Vehicle.objects.get(id=vehicle_id)
         except Vehicle.DoesNotExist:
-            return Response("Vehicle does not exist")
+            return Response("Vehicle does not exist", status=HTTP_404_NOT_FOUND)
 
         vehicle.name = request.data.get('name', vehicle.name)
         vehicle.type = request.data.get('type', vehicle.type)
@@ -215,4 +215,4 @@ class CreateVehicle(APIView):
                 return Response(status, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"message": "Vehicle Created successfully",
-                         "vehicle_basic": new_vehicle_data}, status=HTTP_201_CREATED)
+                         "vehicle": new_vehicle_data}, status=HTTP_201_CREATED)

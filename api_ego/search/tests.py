@@ -1,8 +1,9 @@
 """
 Search tests
 """
+import json
 from rest_framework.test import APITestCase
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
 
 class SearchWithOrderByTestCase(APITestCase):
@@ -52,32 +53,105 @@ class SearchWithOutOrderByTestCase(APITestCase):
 
     def test_search_type_all(self):
         """
-        Test for type parameter = 'ALL'
+        Test for search endpoint with type parameter = 'ALL'
         """
-        response = self.client.get(
-            "/search/type=ALL")
+
+        # Create test object
+        data = {
+            "name": "search all test",
+            "type": "Pickups",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 500000
+        }
+        post_response = self.client.post(
+            "/vehicle/create",
+            json.dumps(data, indent=4), content_type='application/json')
+
+        # Check if test object was created successfully
+        self.assertEqual(post_response.status_code, HTTP_201_CREATED)
+
+        # Get test object
+        response = self.client.get("/search/type=ALL")
+
         self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
 
     def test_search_type_auto(self):
         """
-        Test for type parameter = 'AUTO'
+        Test for search endpoint with type parameter = 'AUTO'
         """
-        response = self.client.get(
-            "/search/type=AUTO")
+        # Create test object
+        data = {
+            "name": "search all test",
+            "type": "Auto",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 500000
+        }
+        post_response = self.client.post(
+            "/vehicle/create",
+            json.dumps(data, indent=4), content_type='application/json')
+
+        # Check if test object was created successfully
+        self.assertEqual(post_response.status_code, HTTP_201_CREATED)
+
+        # Get test object
+        response = self.client.get("/search/type=auto")
+
         self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
 
     def test_search_type_suvs(self):
         """
-        Test for type parameter = 'SUVssss'
+        Test for search endpoint with type parameter = 'SUVssss'
         """
-        response = self.client.get(
-            "/search/type=SUVssss")
-        self.assertEqual(response.status_code, HTTP_200_OK)
+        # Create test object
+        data = {
+            "name": "search all test",
+            "type": "SUVs",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 500000
+        }
+        post_response = self.client.post(
+            "/vehicle/create",
+            json.dumps(data, indent=4), content_type='application/json')
 
-    def test_search_invalid_type(self):
-        """
-        Test for type parameter = 'piCKups'
-        """
-        response = self.client.get(
-            "/search/type=piCKups")
+        # Check if test object was created successfully
+        self.assertEqual(post_response.status_code, HTTP_201_CREATED)
+
+        # Get test object
+        response = self.client.get("/search/type=suvs")
+
         self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_search_type_pickup(self):
+        """
+        Test for search endpoint with type parameter = 'piCKups'
+        """
+        # Create test object
+        data = {
+            "name": "search all test",
+            "type": "pickups",
+            "model": "Conquest",
+            "brand": "Toyota",
+            "date": "2023-06-23",
+            "price": 500000
+        }
+        post_response = self.client.post(
+            "/vehicle/create",
+            json.dumps(data, indent=4), content_type='application/json')
+
+        # Check if test object was created successfully
+        self.assertEqual(post_response.status_code, HTTP_201_CREATED)
+
+        # Get test object
+        response = self.client.get("/search/type=piCKups")
+
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)

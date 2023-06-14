@@ -7,7 +7,7 @@ The following endpoint uses the POST method to create a new vehicle with the dat
 The features and the images are not required to create a new vehicle.
 
 ```
-URL : vehicle/create
+URL : /vehicle/create
 ```
 ### REQUEST BODY EXAMPLE
 ```json
@@ -44,7 +44,7 @@ URL : vehicle/create
 The following endpoints uses the GET , PUT and DELETE methods to modify , eliminate or get the data of a specific vehicle with the ID provided in the url.
 
 ```
-URL : specific_vehicle/id=<int>
+URL : /specific_vehicle/id=<int>
 ```
 
 ### METHODS

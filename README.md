@@ -1,6 +1,11 @@
-# API TEST - EGO
+# VEHICLES API
 
-This a API created with Python 3.10.4 and Django Rest Framework for the backend test of ego.
+This is a API created with Python 3.10.4 and Django Rest Framework.
+It has different features such as:
+- Ordering by
+- Filter by Type
+- CRUD
+- Swagger UI
 
 # HOW TO TEST THIS API
 
@@ -14,6 +19,14 @@ git clone https://github.com/Franco-Micheletti/test-dev
 
 ## - STEP 2 - 
 
+Create .env file with the SECRET_KEY variable inside for security purposes.
+To generate a new SECRET_KEY do the following:
+```
+python manage.py shell
+from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
+exit
+```
 Open an integrated terminal on the repository folder and execute the following command in order to install all the modules required for the project:
 ```
 pip install -r requirements.txt
